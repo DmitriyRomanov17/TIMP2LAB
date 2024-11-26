@@ -1,5 +1,5 @@
 #include "headers/TranspositionCipher.hpp"
-
+#include <locale>
 #include <iostream>
 
 bool is_valid(const std::wstring& string) {
@@ -12,7 +12,8 @@ bool is_valid(const std::wstring& string) {
 }
 
 int main() {
-    setlocale(LC_ALL, "Russian_Russia.866");
+    std::locale loc("ru_RU.UTF-8");
+    std::locale::global(loc);
 
     int32_t key = 0;
     std::wcout << L"Input the key: ";

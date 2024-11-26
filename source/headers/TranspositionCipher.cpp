@@ -7,7 +7,7 @@ TranspositionCipher::TranspositionCipher(const int32_t& key) {
     this->key = key;
 }
 
-std::wstring TranspositionCipher::encrypt(const std::wstring& text) try {
+std::wstring TranspositionCipher::encrypt(const std::wstring& text) {
     std::wstring encrypted_text = text;
     uint32_t row_count = (text.length() + 1) / (this->key - 1);
     
@@ -15,19 +15,16 @@ std::wstring TranspositionCipher::encrypt(const std::wstring& text) try {
     for (uint32_t i = this->key; i > 0; --i) {
         for (uint32_t j = 0; j < row_count; ++j) {
             uint32_t index = (this->key * j + i ) - 1;
-            if (index >= text.length()) {
-                throw std::out_of_range("Index out of range");
+            if (index < text.length()) {
+                encrypted_text[accumulator++] = text[index];
             }
-            encrypted_text[accumulator++] = text[index];
         }
     }
 
     return encrypted_text;
-} catch (const std::exception& e) {
-    throw std::runtime_error("Error during encryption: " + std::string(e.what()));
 }
 
-std::wstring TranspositionCipher::decrypt(const std::wstring& text) try {
+std::wstring TranspositionCipher::decrypt(const std::wstring& text) {
     std::wstring decrypted_text = text;
     uint32_t row_count = (text.length() + 1) / (this->key - 1);
 
@@ -35,14 +32,11 @@ std::wstring TranspositionCipher::decrypt(const std::wstring& text) try {
     for (uint32_t i = this->key; i > 0; --i) {
         for (uint32_t j = 0; j < row_count; ++j) {
             uint32_t index = (this->key * j + i) - 1;
-            if (index >= text.length()) {
-                throw std::out_of_range("Index out of range");
+            if (index < text.length()) {
+                decrypted_text[index] = text[accumulator++];
             }
-            decrypted_text[index] = text[accumulator++];
         }
     }
 
     return decrypted_text;
-} catch (const std::exception& e) {
-    throw std::runtime_error("Error during decryption: " + std::string(e.what()));
 }
